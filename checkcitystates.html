@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+  <head>
+    <title>Region > Country > Division</title>
+
+  </head>
+  <body>
+    <select  class="countries order-alpha presel-byip " id="countryId">
+      <option value="">Select Country</option>
+    </select>
+    <select  class="states order-alpha" id="stateId" disabled>
+      <option value="">Select State</option>
+    </select>
+    <select  class="cities order-alpha" id="cityId" disabled>
+      <option value="">Select City</option>
+    </select>
+   
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+
+    <script>
+
+      $.getJSON("Json/countries.json", function (result) {
+        //    console.log(result);
+        $("#countryId").html("<option value=''>Select Country</option>");
+        var count=0;
+        for (var i in result.countries) {
+            console.log("country count is "+count);
+            count++;
+          $("#countryId").append("<option name="+ result.countries[i].name +" value='" + result.countries[i].id + "'>" + result.countries[i].name + "</option>")
+        }
+        $("#countryId").on("change", function () {
+          console.log(document.getElementById("countryId").value);
+          $("#stateId").html("<option>Please Wait</option>");
+          if (this.value !== "") {
+            document.getElementById("stateId").disabled = false;
+            var id = this.value;
+            $.getJSON("Json/states.json", function (result) {
+              $("#stateId").html("<option>Select State</option>");
+              for (var i in result.states) {
+                if (result.states[i].country_id === id) {
+                  $("#stateId").append("<option name="+ result.states[i].name +" value='" + result.states[i].id + "'>" + result.states[i].name + "</option>");
+                }
+              }
+
+            });
+            $("#stateId").on("change", function () {
+                     $("#cityId").html("<option>Please Wait</option>");
+              if (this.value !== "") {
+                document.getElementById("cityId").disabled = false;
+                var sid = this.value;
+                console.log("state id is " + sid);
+                $.getJSON("Json/cities.json", function (res) {
+                  $("#cityId").html("<option>Select City</option>");
+                  for (var i in res.cities) {
+                    //   console.log(i);
+                    if (res.cities[i].state_id === sid) {
+                      $("#cityId").append("<option value='"+ res.cities[i].name +"'>" + res.cities[i].name + "</option>");
+                    }
+                  }
+
+                });
+              }
+              else {
+                $("#cityId").val("").change();
+                document.getElementById("cityId").disabled = true;
+              }
+            });
+          }
+          else {
+            $("#stateId").val("").change();
+            document.getElementById("stateId").disabled = true;
+          }
+          
+        });
+      });
+     
+      function country(country){
+     
+        $.getJSON("Json/countries.json", function (result) {
+        
+        for (var i in result.countries) {
+        if(result.countries[i].id===country){
+        //  alert("hello user from "+result.countries[i].name);
+          return result.countries[i].name;
+        }
+    }
+      });
+ // alert(document.getElementById("countryId").innerHTML); 
+ alert($("#countryId option:selected").html());
+  }
+
+     function states(state){
+        $.getJSON("Json/states.json", function (result) {
+   
+        for (var i in result.states) {
+       //   console.log(result.states[i].id);
+        if(result.states[i].id===state){  
+     
+          alert("hello user from "+result.states[i].name);
+        }
+    }
+      });     
+     }
+    // console.log(country(21));
+     
+    </script>
+  </body>
+</html>
