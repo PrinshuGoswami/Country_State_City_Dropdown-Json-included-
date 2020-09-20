@@ -21,7 +21,7 @@
 
     <script>
 
-      $.getJSON("Json/countries.json", function (result) {
+      $.getJSON("countries.json", function (result) {
         //    console.log(result);
         $("#countryId").html("<option value=''>Select Country</option>");
         var count=0;
@@ -36,7 +36,7 @@
           if (this.value !== "") {
             document.getElementById("stateId").disabled = false;
             var id = this.value;
-            $.getJSON("Json/states.json", function (result) {
+            $.getJSON("states.json", function (result) {
               $("#stateId").html("<option>Select State</option>");
               for (var i in result.states) {
                 if (result.states[i].country_id === id) {
@@ -51,7 +51,7 @@
                 document.getElementById("cityId").disabled = false;
                 var sid = this.value;
                 console.log("state id is " + sid);
-                $.getJSON("Json/cities.json", function (res) {
+                $.getJSON("cities.json", function (res) {
                   $("#cityId").html("<option>Select City</option>");
                   for (var i in res.cities) {
                     //   console.log(i);
@@ -78,7 +78,7 @@
      
       function country(country){
      
-        $.getJSON("Json/countries.json", function (result) {
+        $.getJSON("countries.json", function (result) {
         
         for (var i in result.countries) {
         if(result.countries[i].id===country){
@@ -92,7 +92,7 @@
   }
 
      function states(state){
-        $.getJSON("Json/states.json", function (result) {
+        $.getJSON("states.json", function (result) {
    
         for (var i in result.states) {
        //   console.log(result.states[i].id);
